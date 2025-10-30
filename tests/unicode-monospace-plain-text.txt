@@ -1,0 +1,46 @@
+Background
+Domain/IP/URL/Network Patterns: foo (k1000.acme.com/10.196.10.33) bar https://resacme.abcd.com foo 192.168.1.50-140 bar (10.26.91.0/24,10.26.92.0/24). Edge: test http://example.com?x=1&y=2 (convert). Skip: see the website example.com/docs (no protocol). Skip: https://example.com/path (inside bold).
+
+Cookies and Authentication: sets the .ASPXAUTH and ASP.NET_SessionId and JSESSIONID cookies. Edge: cookie name SESSIONID12345=cookieValue987 (convert up to =). Skip: "Session expired." message (not a cookie).
+
+Email/UNC/LocalPath/DomainUser: found email john.doe@example.com at \qwe-sys-01\c$\inetpub\wwwroot on server qwe-sys-01, local path (c:\inetpub\wwwroot), URL /Acme/LogOff?manual=True and creds domain\ent_meraki. Additional: found user jane_admin@corp.local and C:\Temp\data.txt and /opt/web/config.yaml. Skip: john.doe@example.com (inside bold).
+
+Methods/Files/Extensions: call DataProtectionScope.LocalMachine() to protect challenge.bin and challenge_raw.xml and found .config and .bak and .kdbx files. Edge: SecureData.Save() (convert) vs SecureData (no parentheses, skip). Skip: notes about .old files unless explicitly listed.
+
+GUID/Subdomain/Share: UserID e0908b0f-1312-43fe-9ef4-04d1777d9aad on subdomain1.domain.com share \fbfx1.acme.net\3434saa\ssdf3 directory. Edge: GUID {3F2504E0-4F89-11D3-9A0C-0305E82C3301} (with braces). Skip: partial GUID e0908b0f (not valid).
+
+Version Skip Logic: ASP.NET MVC 3.0 reached end-of-life in April 2016, and .NET Framework 4.0.30319 corresponds to .NET 4.0, superseded by newer versions. Inventory applications running on end-of-life frameworks (ASP.NET MVC 1.0-3.0, .NET Framework 1.0-4.5). Skip: prior to version 5.0 (do not convert). Convert: running 5.1.3 and using v2.0.1 and installed 4.8.
+
+Headers/Config Files: Remove X-AspNetMvc-Version and X-AspNet-Version from resource.acme.com by modifying web.config and applicationHost.config. Edge: delete header X-Powered-By on example.net. Skip: "Web.Config" (capitalized but not path).
+
+Compliance: Potential violation of PCI DSS Requirement 8.2.1 and NIST SP 800-53 IA-5 and SOC 2 CC6.1 and HIPAA 164.312. Add: ISO/IEC 27001:2022 reference (do not convert, compliance).
+
+Registry/EnvVars: Found HKLM\System\CurrentControlSet and %APPDATA% and $PATH and $HOME/.ssh/id_rsa. Edge: HKCU\Software\Microsoft\Office (convert). Skip: "HKLM" mentioned alone (not path).
+
+API/Ports/Services: endpoint /api/v2/users/delete on port 443/tcp service mssqlserver and w3svc and sshd. Edge: service called mqtt or vsftpd. Skip: Port 80 (word "Port" indicates context).
+
+MAC/SID: MAC address 00:1F:3C:45:67:89 for SID S-1-5-21-3323567890-1234-500. Skip: 00:00 placeholder (not full MAC). Edge: lowercase mac 00:1a:2b:3c:4d:5e (convert).
+
+LDAP/PowerShell: query LDAP://dc01.corp.com/CN=Users,DC=corp using Get-ADUser and Invoke-Command. Edge: LDAP://OU=Admins,DC=example,DC=local filter. Skip: "ldap" in plain lowercase text (no URL-like form).
+
+XML Edge Cases: <a>b</a> and <user>john</user><role>admin</role> and <config><db>prod</db><port>3306</port></config> and <note>This tag block exceeds fifty character limit count</note> (51 chars not converted). Added: <html><body><p>test</p></body></html> (convert ~≤50).
+
+CVE/CWE: CVE-2024-12345 and CVE-2023-45678 mapped to CWE-79 and CWE-20. Skip: CVEs mentioned before "deprecated" or "compliance" (no convert).
+
+Adjacent Patterns: user@domain.com:Password123@10.0.0.1:3306/tcp. Add: admin@example.org@8080/tcp (convert only valid port segment). Skip: Password123@HomeNetwork (no IP/port pattern).
+
+JSON Keys: "apiKey":"1234567890","accessToken":"abc123". Edge: { "dbName":"prod_db","connPort":"3306" }. Skip: {"configVersion":"longstringexceedingfiftycharactersnochange"}.
+
+SQL Identifiers: dbo.Users and master.dbo.sysadmin call SELECT * FROM users. Edge: schema.LogTable and function EncryptData(). Skip: reference to table names in paragraph text like "users table".
+
+IPv6/CIDR6: 2001:0db8:85a3::8a2e:0370:7334 and fe80::/10. Edge: link-local address fe80::1ff:fe23:4567:890a. Skip: incomplete fe80:: (double colon only).
+
+Mixed Case Edge: AcmeCloserCCE.exe vs acmeclosercce.dll. Add: Acme.System.IO.dll vs acmesystemio.EXE. Skip: words ending with .text or .example (not real extensions).
+
+Version Preceded (should convert): using 3.0 and running 4.0.30319 and version 1.7.2 and installed 2.1.0. Skip: prior to 3.1.0 and deprecated since v4.2.
+
+Parentheses Edge: (k1000.acme.com) and [10.0.0.1] and {master.dbo}. Edge: (C:\Program Files\App\main.exe) within path parentheses. Skip: parentheses containing text only (hello world).
+
+Path Length Thresholds: \server\share\path\to\very\long\file.txt (36 chars, convert). \server\share\path\to\very\long\folder\file.txt (51 chars, skip). Edge: /usr/local/bin/script.sh (convert). Skip: /usr/local/bin/scripts/verylongdirectoryname1234567/config (over 50).
+
+Punctuation Boundaries: Check file config.json. Navigate to https://api.example.com/v1/users? The server db01.acme.com; however, backup.acme.com! Found path C:\Windows\System32\drivers\etc\hosts, then checked /etc/hosts: both exist. Email is admin@acme.com. Service runs on 8080/tcp.
