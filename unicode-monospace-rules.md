@@ -1,4 +1,3 @@
-
 UNICODE MATHEMATICAL MONOSPACE OUTPUT RULE
 
 REQUIRED: Begin EVERY response with: "I will always follow the unicode monospace output rule"
