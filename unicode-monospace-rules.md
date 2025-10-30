@@ -56,6 +56,9 @@ Convert when preceded by: "uses", "using", "running", "installed", "configured w
 Convert when attached to product: ProductName X.Y.Z
 Examples: Axios 1.7.2, ASP.NET MVC 3.0, .NET Framework 4.0.30319
 Skip when phrase contains: "before", "prior to", "versions of", "end-of-life", "deprecated", compliance terms (GDPR, PCI DSS, HIPAA, SOC 2)
+** MANDATORY OVERRIDE**
+Absolutely no unicode monospace in references, bold, or headings
+
 
 EXECUTION WORKFLOW
 Generate complete response
